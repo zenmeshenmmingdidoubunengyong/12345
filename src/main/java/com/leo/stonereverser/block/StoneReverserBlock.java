@@ -1,6 +1,7 @@
 package com.leo.stonereverser.block;
 
 import com.leo.stonereverser.menu.StoneReverserMenu;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -23,6 +24,12 @@ public class StoneReverserBlock extends HorizontalDirectionalBlock implements Me
     public StoneReverserBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    // ★ 新增：Minecraft 1.21+ 要求所有 Block 子类实现 codec()
+    @Override
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return simpleCodec(StoneReverserBlock::new);
     }
 
     @Override
