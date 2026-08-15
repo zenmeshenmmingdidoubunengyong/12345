@@ -1,5 +1,0 @@
-{
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "minecraft:weathered_copper" } ],
-  "result": { "id": "minecraft:copper_ingot", "count": 9 }
-}
