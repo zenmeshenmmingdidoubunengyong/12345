@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "stonereverser:block/stone_reverser" },
+    "facing=south": { "model": "stonereverser:block/stone_reverser", "y": 180 },
+    "facing=west": { "model": "stonereverser:block/stone_reverser", "y": 270 },
+    "facing=east": { "model": "stonereverser:block/stone_reverser", "y": 90 }
+  }
+}
