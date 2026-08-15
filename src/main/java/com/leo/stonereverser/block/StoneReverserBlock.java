@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class StoneReverserBlock extends HorizontalDirectionalBlock implements MenuProvider {
+public class StoneReverserBlock extends HorizontalDirectionalBlock {
     public static final Component TITLE = Component.translatable("container.stone_reverser");
 
     public StoneReverserBlock(Properties properties) {
@@ -26,7 +26,6 @@ public class StoneReverserBlock extends HorizontalDirectionalBlock implements Me
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
-    // ★ 新增：Minecraft 1.21+ 要求所有 Block 子类实现 codec()
     @Override
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
         return simpleCodec(StoneReverserBlock::new);
