@@ -13,21 +13,22 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class StoneReverserBlock extends HorizontalDirectionalBlock {
+public class StoneReverserBlock extends DirectionalBlock {
     public static final Component TITLE = Component.translatable("container.stone_reverser");
 
     public StoneReverserBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        // 默认正面朝下
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.DOWN));
     }
 
     @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+    protected MapCodec<? extends DirectionalBlock> codec() {
         return simpleCodec(StoneReverserBlock::new);
     }
 
@@ -38,7 +39,8 @@ public class StoneReverserBlock extends HorizontalDirectionalBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        // 放置时默认朝下（正面朝下）
+        return this.defaultBlockState().setValue(FACING, Direction.DOWN);
     }
 
     @Override
