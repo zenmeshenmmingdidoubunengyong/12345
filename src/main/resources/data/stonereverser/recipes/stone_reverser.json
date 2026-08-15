@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [ "SSS", " I ", "   " ],
+  "key": {
+    "S": { "tag": "minecraft:stone_crafting_materials" },
+    "I": { "item": "minecraft:iron_ingot" }
+  },
+  "result": { "id": "stonereverser:stone_reverser", "count": 1 }
+}

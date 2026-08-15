@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "minecraft:waxed_exposed_copper" } ],
+  "result": { "id": "minecraft:copper_ingot", "count": 9 }
+}
