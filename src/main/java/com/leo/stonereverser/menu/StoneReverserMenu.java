@@ -262,6 +262,44 @@ public class StoneReverserMenu extends AbstractContainerMenu {
             if (slotStack.getCount() == stack.getCount()) return ItemStack.EMPTY;
             slot.onTake(player, slotStack);
         }
+
+        // ---- 关键修复：shift 操作后手动刷新反向配方列表 ----
+        // 因为内部用 suppressSetChanged 阻止了递归，所以必须在这里手动重算
+        if (index == 0 || (index >= 2 && index <= 38)) {
+            ItemStack input = this.inputSlot.getItem();
+            if (input.isEmpty()) {
+                // 输入槽变空 → 清空所有反向配方
+                this.inputItem = ItemStack.EMPTY;
+                this.reverseRecipes.clear();
+                this.selectedRecipeIndex.set(-1);
+                this.suppressSetChanged = true;
+                try {
+                    this.resultSlot.set(ItemStack.EMPTY);
+                } finally {
+                    this.suppressSetChanged = false;
+                }
+                this.slotUpdateListener.run();
+            } else if (!ItemStack.isSameItemSameComponents(input, this.inputItem)) {
+                // 输入物品变了 → 重新搜索反向配方
+                this.updateReverseRecipes(input);
+            } else {
+                // 物品没变，但数量可能变化 → 检查选中配方是否还成立
+                if (this.selectedRecipeIndex.get() >= 0) {
+                    int cost = this.getSelectedRecipeCost();
+                    if (input.getCount() < cost) {
+                        this.suppressSetChanged = true;
+                        try {
+                            this.resultSlot.set(ItemStack.EMPTY);
+                        } finally {
+                            this.suppressSetChanged = false;
+                        }
+                    } else {
+                        this.setSelectedRecipe(this.selectedRecipeIndex.get());
+                    }
+                }
+                this.slotUpdateListener.run();
+            }
+        }
         return stack;
     }
 

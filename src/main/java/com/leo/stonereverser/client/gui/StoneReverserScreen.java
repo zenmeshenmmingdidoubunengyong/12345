@@ -43,6 +43,9 @@ public class StoneReverserScreen extends AbstractContainerScreen<StoneReverserMe
     @Override
     protected void init() {
         super.init();
+        // 确保 GUI 尺寸与 stonecutter.png (176x166) 一致，防止物品/背景偏移
+        this.imageWidth = 176;
+        this.imageHeight = 166;
         this.containerChanged();
     }
 
