@@ -1,0 +1,23 @@
+--------------------------------------------------------------------------------
+
+Command-Line:
+ - /root/.local/share/mise/installs/java/temurin-21.0.6+7.0.LTS/bin/java
+ - -jar
+ - /root/.gradle/caches/modules-2/files-2.1/net.neoforged.installertools/installertools/4.0.12/94b6e47c3f51f8ca40f8c54720369a952b821e95/installertools-4.0.12-fatjar.jar
+ - --task
+ - PROCESS_MINECRAFT_JAR
+ - --input
+ - /root/.gradle/caches/neoformruntime/intermediate_results/copyUnpatchedClasses_a7d4cae25c265730fbcf5b38fca8a39cc450dc54_output.jar
+ - --output
+ - ./output.jar
+ - --no-mod-manifest
+ - --access-transformer
+ - ats/accesstransformer.cfg
+--------------------------------------------------------------------------------
+
+Task: PROCESS_MINECRAFT_JAR
+load access transformers [27ms]
+load input zip [380ms]
+apply dev transforms [431ms]
+write output file [1504ms]
+overall work [2366ms]

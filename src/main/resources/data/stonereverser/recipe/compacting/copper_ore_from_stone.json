@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:mod_loaded", "modid": "create" }
+  ],
+  "type": "create:compacting",
+  "ingredients": [
+    { "item": "minecraft:raw_copper" },
+    { "item": "minecraft:stone" }
+  ],
+  "results": [
+    { "id": "minecraft:copper_ore", "count": 1 }
+  ]
+}

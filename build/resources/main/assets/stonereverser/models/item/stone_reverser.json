@@ -1,0 +1,9 @@
+{
+  "parent": "stonereverser:block/stone_reverser",
+  "display": {
+    "gui": {
+      "rotation": [30, 225, 180],
+      "scale": [0.625, 0.625, 0.625]
+    }
+  }
+}
