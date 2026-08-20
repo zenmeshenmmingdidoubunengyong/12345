@@ -1,4 +1,5 @@
 {
-  "block.stonereverser.stone_reverser": "机石切",
-  "container.stone_reverser": "机石切"
+  "block.stonereverser.stone_reverser": "石切机",
+  "container.stone_reverser": "石切机",
+  "itemGroup.stonereverser": "石切机"
 }

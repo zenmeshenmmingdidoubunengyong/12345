@@ -1,4 +1,5 @@
 {
   "block.stonereverser.stone_reverser": "Stone Reverser",
-  "container.stone_reverser": "Stone Reverser"
+  "container.stone_reverser": "Stone Reverser",
+  "itemGroup.stonereverser": "Stone Reverser"
 }

@@ -12,6 +12,7 @@ public class StoneReverserMod {
     public StoneReverserMod(IEventBus modEventBus) {
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlocks.ITEMS.register(modEventBus);
+        ModBlocks.CREATIVE_MODE_TABS.register(modEventBus);
         ModMenuTypes.MENUS.register(modEventBus);
     }
 }
