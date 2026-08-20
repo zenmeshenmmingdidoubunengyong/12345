@@ -1,0 +1,14 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:mod_loaded", "modid": "createnuclear" },
+    { "type": "neoforge:mod_loaded", "modid": "create" }
+  ],
+  "type": "create:compacting",
+  "ingredients": [
+    { "item": "createnuclear:raw_lead" },
+    { "item": "minecraft:stone" }
+  ],
+  "results": [
+    { "id": "createnuclear:lead_ore", "count": 1 }
+  ]
+}

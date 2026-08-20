@@ -33,6 +33,8 @@ public class StoneReverserMenu extends AbstractContainerMenu {
     final Slot resultSlot;
     Runnable slotUpdateListener = () -> { };
     public final Container container;
+    /** 防止 slotsChanged → resultSlot.set → setChanged → slotsChanged 无限递归 */
+    private boolean suppressSetChanged = false;
 
     public record ReverseRecipeInfo(ItemStack result, int inputCost) { }
 
@@ -45,16 +47,21 @@ public class StoneReverserMenu extends AbstractContainerMenu {
         this.access = access;
         this.level = inv.player.level();
         this.container = new SimpleContainer(2) {
+            @Override
             public void setChanged() {
                 super.setChanged();
-                StoneReverserMenu.this.slotsChanged(this);
+                if (!suppressSetChanged) {
+                    StoneReverserMenu.this.slotsChanged(this);
+                }
             }
         };
 
         this.inputSlot = this.addSlot(new Slot(this.container, 0, 20, 33));
         this.resultSlot = this.addSlot(new Slot(this.container, 1, 143, 33) {
+            @Override
             public boolean mayPlace(ItemStack stack) { return false; }
 
+            @Override
             public void onTake(Player player, ItemStack stack) {
                 stack.onCraftedBy(player.level(), player, stack.getCount());
                 StoneReverserMenu.this.access.execute((lvl, pos) -> {
@@ -66,8 +73,18 @@ public class StoneReverserMenu extends AbstractContainerMenu {
                 });
                 int cost = StoneReverserMenu.this.getSelectedRecipeCost();
                 ItemStack input = StoneReverserMenu.this.inputSlot.getItem();
+                // 直接修改 ItemStack 本体，不走 Slot#set（避免触发 setChanged 导致列表重新刷新丢选中）
                 input.shrink(cost);
-                StoneReverserMenu.this.inputSlot.set(input);
+                if (input.isEmpty()) {
+                    StoneReverserMenu.this.suppressSetChanged = true;
+                    try {
+                        StoneReverserMenu.this.inputSlot.set(ItemStack.EMPTY);
+                    } finally {
+                        StoneReverserMenu.this.suppressSetChanged = false;
+                    }
+                } else {
+                    StoneReverserMenu.this.inputSlot.setChanged();
+                }
             }
         });
 
@@ -106,21 +123,39 @@ public class StoneReverserMenu extends AbstractContainerMenu {
     private void setSelectedRecipe(int index) {
         if (this.isValidRecipeIndex(index)) {
             ReverseRecipeInfo info = this.reverseRecipes.get(index);
-            this.resultSlot.set(info.result().copy());
+            ItemStack out = info.result().copy();
+            this.suppressSetChanged = true;
+            try {
+                this.resultSlot.set(out);
+            } finally {
+                this.suppressSetChanged = false;
+            }
         } else {
-            this.resultSlot.set(ItemStack.EMPTY);
+            this.suppressSetChanged = true;
+            try {
+                this.resultSlot.set(ItemStack.EMPTY);
+            } finally {
+                this.suppressSetChanged = false;
+            }
         }
         this.broadcastChanges();
     }
 
     @Override
     public void slotsChanged(Container container) {
+        if (this.suppressSetChanged) return; // 内部写入触发：直接跳过，不再重算
+
         ItemStack input = this.inputSlot.getItem();
         if (input.isEmpty()) {
             this.inputItem = ItemStack.EMPTY;
             this.reverseRecipes.clear();
             this.selectedRecipeIndex.set(-1);
-            this.resultSlot.set(ItemStack.EMPTY);
+            this.suppressSetChanged = true;
+            try {
+                this.resultSlot.set(ItemStack.EMPTY);
+            } finally {
+                this.suppressSetChanged = false;
+            }
         } else if (!ItemStack.isSameItemSameComponents(input, this.inputItem)) {
             this.inputItem = input.copy();
             this.updateReverseRecipes(input);
@@ -128,7 +163,12 @@ public class StoneReverserMenu extends AbstractContainerMenu {
             if (this.selectedRecipeIndex.get() >= 0) {
                 int cost = this.getSelectedRecipeCost();
                 if (input.getCount() < cost) {
-                    this.resultSlot.set(ItemStack.EMPTY);
+                    this.suppressSetChanged = true;
+                    try {
+                        this.resultSlot.set(ItemStack.EMPTY);
+                    } finally {
+                        this.suppressSetChanged = false;
+                    }
                 } else {
                     this.setSelectedRecipe(this.selectedRecipeIndex.get());
                 }
@@ -140,7 +180,12 @@ public class StoneReverserMenu extends AbstractContainerMenu {
     private void updateReverseRecipes(ItemStack input) {
         this.reverseRecipes.clear();
         this.selectedRecipeIndex.set(-1);
-        this.resultSlot.set(ItemStack.EMPTY);
+        this.suppressSetChanged = true;
+        try {
+            this.resultSlot.set(ItemStack.EMPTY);
+        } finally {
+            this.suppressSetChanged = false;
+        }
         if (input.isEmpty()) return;
 
         RecipeManager manager = this.level.getRecipeManager();
@@ -149,7 +194,13 @@ public class StoneReverserMenu extends AbstractContainerMenu {
 
         for (var holder : allRecipes) {
             SingleItemRecipe recipe = holder.value();
-            ItemStack result = recipe.getResultItem(this.level.registryAccess());
+            ItemStack result;
+            try {
+                result = recipe.getResultItem(this.level.registryAccess());
+            } catch (Exception ignored) {
+                // 部分 recipe 序列化器要求 registryAccess，保护一下
+                continue;
+            }
             if (result.getItem() == input.getItem()) {
                 Ingredient ingredient = recipe.getIngredients().get(0);
                 for (ItemStack item : ingredient.getItems()) {
@@ -197,8 +248,16 @@ public class StoneReverserMenu extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(slotStack, 2, 29, false)) return ItemStack.EMPTY;
             }
 
-            if (slotStack.isEmpty()) slot.set(ItemStack.EMPTY);
-            else slot.setChanged();
+            if (slotStack.isEmpty()) {
+                this.suppressSetChanged = true;
+                try {
+                    slot.set(ItemStack.EMPTY);
+                } finally {
+                    this.suppressSetChanged = false;
+                }
+            } else {
+                slot.setChanged();
+            }
 
             if (slotStack.getCount() == stack.getCount()) return ItemStack.EMPTY;
             slot.onTake(player, slotStack);

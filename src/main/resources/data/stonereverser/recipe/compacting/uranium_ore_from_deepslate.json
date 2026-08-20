@@ -1,0 +1,14 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:mod_loaded", "modid": "createnuclear" },
+    { "type": "neoforge:mod_loaded", "modid": "create" }
+  ],
+  "type": "create:compacting",
+  "ingredients": [
+    { "item": "createnuclear:raw_uranium" },
+    { "item": "minecraft:deepslate" }
+  ],
+  "results": [
+    { "id": "createnuclear:deepslate_uranium_ore", "count": 1 }
+  ]
+}
