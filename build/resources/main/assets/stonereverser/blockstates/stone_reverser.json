@@ -1,10 +1,8 @@
 {
   "variants": {
-    "facing=down":  { "model": "stonereverser:block/stone_reverser", "x": 180 },
-    "facing=up":    { "model": "stonereverser:block/stone_reverser" },
-    "facing=north": { "model": "stonereverser:block/stone_reverser", "x": 90 },
-    "facing=south": { "model": "stonereverser:block/stone_reverser", "x": 90, "y": 180 },
-    "facing=west":  { "model": "stonereverser:block/stone_reverser", "x": 90, "y": 270 },
-    "facing=east":  { "model": "stonereverser:block/stone_reverser", "x": 90, "y": 90 }
+    "facing=north": { "model": "stonereverser:block/stone_reverser" },
+    "facing=south": { "model": "stonereverser:block/stone_reverser", "y": 180 },
+    "facing=west":  { "model": "stonereverser:block/stone_reverser", "y": 270 },
+    "facing=east":  { "model": "stonereverser:block/stone_reverser", "y": 90 }
   }
 }

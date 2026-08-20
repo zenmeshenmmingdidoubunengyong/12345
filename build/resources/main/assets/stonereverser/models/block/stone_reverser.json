@@ -1,3 +1,10 @@
 {
-  "parent": "minecraft:block/stonecutter"
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top":    "stonereverser:block/stone_reverser_top",
+    "bottom": "stonereverser:block/stone_reverser_bottom",
+    "side":   "stonereverser:block/stone_reverser_side",
+    "front":  "stonereverser:block/stone_reverser_front",
+    "particle": "stonereverser:block/stone_reverser_side"
+  }
 }

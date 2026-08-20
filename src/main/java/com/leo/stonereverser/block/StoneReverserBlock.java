@@ -13,23 +13,24 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class StoneReverserBlock extends DirectionalBlock {
+public class StoneReverserBlock extends HorizontalDirectionalBlock {
     public static final Component TITLE = Component.translatable("container.stone_reverser");
+    public static final MapCodec<StoneReverserBlock> CODEC = simpleCodec(StoneReverserBlock::new);
 
     public StoneReverserBlock(Properties properties) {
         super(properties);
-        // 默认正面朝下
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.DOWN));
+        // 默认朝南朝北任意；放置时会根据玩家朝向重设
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    protected MapCodec<? extends DirectionalBlock> codec() {
-        return simpleCodec(StoneReverserBlock::new);
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -39,18 +40,19 @@ public class StoneReverserBlock extends DirectionalBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        // 放置时默认朝下（正面朝下）
-        return this.defaultBlockState().setValue(FACING, Direction.DOWN);
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
-        } else {
-            player.openMenu(state.getMenuProvider(level, pos));
-            return InteractionResult.CONSUME;
         }
+        MenuProvider provider = getMenuProvider(state, level, pos);
+        if (provider != null) {
+            player.openMenu(provider);
+        }
+        return InteractionResult.CONSUME;
     }
 
     @Override
