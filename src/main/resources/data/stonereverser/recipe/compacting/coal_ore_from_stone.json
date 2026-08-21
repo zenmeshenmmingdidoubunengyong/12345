@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:mod_loaded", "modid": "create" }
+  ],
+  "type": "create:compacting",
+  "ingredients": [
+    { "item": "minecraft:coal" },
+    { "item": "minecraft:stone" }
+  ],
+  "results": [
+    { "item": "minecraft:coal_ore", "count": 1 }
+  ]
+}

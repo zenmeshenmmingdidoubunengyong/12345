@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:mod_loaded", "modid": "create" }
+  ],
+  "type": "create:compacting",
+  "ingredients": [
+    { "item": "minecraft:emerald" },
+    { "item": "minecraft:stone" }
+  ],
+  "results": [
+    { "item": "minecraft:emerald_ore", "count": 1 }
+  ]
+}
