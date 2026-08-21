@@ -19,8 +19,11 @@ public class ModBlocks {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(StoneReverserMod.MOD_ID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, StoneReverserMod.MOD_ID);
 
+    // 挖掘属性与原版石切机一致：需要类工具才能掉落、挖掘等级 wood（任何镐都能挖）。
+    // ofFullCopy(Blocks.STONECUTTER) 已经继承这些属性，但显式再设一次以防 Create 等修改。
     public static final DeferredBlock<Block> STONE_REVERSER = BLOCKS.register("stone_reverser",
-            () -> new StoneReverserBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONECUTTER)));
+            () -> new StoneReverserBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONECUTTER)
+                    .requiresCorrectToolForDrops()));
 
     public static final DeferredItem<?> STONE_REVERSER_ITEM = ITEMS.registerSimpleBlockItem("stone_reverser", STONE_REVERSER);
 

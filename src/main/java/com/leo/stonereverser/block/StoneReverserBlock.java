@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class StoneReverserBlock extends DirectionalBlock {
@@ -70,27 +69,29 @@ public class StoneReverserBlock extends DirectionalBlock {
     }
 
     /**
-     * 半高碰撞箱（与原版石切机一致）：底部 10 像素是实心底座，顶部 6 像素是锯片区域可穿越。
-     * 这样玩家能走上底座，但能跨过/站在锯片位置，不再像完整方块那样"站在锯片上"。
+     * 半高形状：与原版 StonecutterBlock 的 SHAPE 一致——底部 0~9 像素是实心底座，
+     * 上部锯片区域是贴图、可穿越、不可站立。
+     * getShape 同时作为碰撞箱使用（原版 StonecutterBlock 就是这么做的：不重写 getCollisionShape）。
      */
-    private static final VoxelShape COLLISION_SHAPE = Block.box(0.0, 10.0, 0.0, 16.0, 16.0, 16.0);
-
-    @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return COLLISION_SHAPE;
-    }
-
-    /**
-     * 选择形状（ray trace 用完整方块）：保持与 parent model 一致，
-     * 否则点击面/放置朝向会错位。
-     */
-    @Override
-    public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return Shapes.block();
-    }
+    private static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 9.0, 16.0);
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return Shapes.block();
+        return SHAPE;
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
+    public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return SHAPE;
     }
 }
