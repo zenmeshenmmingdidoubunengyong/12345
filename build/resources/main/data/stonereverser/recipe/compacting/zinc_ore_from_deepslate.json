@@ -1,13 +1,23 @@
 {
   "neoforge:conditions": [
-    { "type": "neoforge:mod_loaded", "modid": "create" }
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
   ],
   "type": "create:compacting",
   "ingredients": [
-    { "item": "create:raw_zinc" },
-    { "item": "minecraft:deepslate" }
+    {
+      "item": "create:raw_zinc"
+    },
+    {
+      "item": "minecraft:deepslate"
+    }
   ],
   "results": [
-    { "item": "create:deepslate_zinc_ore", "count": 1 }
+    {
+      "count": 1,
+      "id": "create:deepslate_zinc_ore"
+    }
   ]
 }

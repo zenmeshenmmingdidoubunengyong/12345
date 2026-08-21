@@ -1,13 +1,23 @@
 {
   "neoforge:conditions": [
-    { "type": "neoforge:mod_loaded", "modid": "create" }
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
   ],
   "type": "create:compacting",
   "ingredients": [
-    { "item": "minecraft:redstone" },
-    { "item": "minecraft:stone" }
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:stone"
+    }
   ],
   "results": [
-    { "item": "minecraft:redstone_ore", "count": 1 }
+    {
+      "count": 1,
+      "id": "minecraft:redstone_ore"
+    }
   ]
 }

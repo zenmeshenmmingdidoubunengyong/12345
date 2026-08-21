@@ -1,13 +1,23 @@
 {
   "neoforge:conditions": [
-    { "type": "neoforge:mod_loaded", "modid": "create" }
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
   ],
   "type": "create:compacting",
   "ingredients": [
-    { "item": "create:raw_zinc" },
-    { "item": "minecraft:stone" }
+    {
+      "item": "create:raw_zinc"
+    },
+    {
+      "item": "minecraft:stone"
+    }
   ],
   "results": [
-    { "item": "create:zinc_ore", "count": 1 }
+    {
+      "count": 1,
+      "id": "create:zinc_ore"
+    }
   ]
 }
