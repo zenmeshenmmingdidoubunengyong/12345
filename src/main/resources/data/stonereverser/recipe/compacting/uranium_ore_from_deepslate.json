@@ -9,6 +9,6 @@
     { "item": "minecraft:deepslate" }
   ],
   "results": [
-    { "id": "createnuclear:deepslate_uranium_ore", "count": 1 }
+    { "item": "createnuclear:deepslate_uranium_ore", "count": 1 }
   ]
 }

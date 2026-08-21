@@ -37,8 +37,17 @@ base {
 }
 
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+// 此处声明为 Java 25（本机器实际 JDK），但编译字节码目标仍为 Java 21 release，保证产物兼容。
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+}
 
+// 让 NeoForge 任务也继承同一个 JDK 25 工具链
 neoForge {
     // Specify the version of NeoForge to use.
     version = project.neo_version
@@ -182,6 +191,33 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+// NeoForge 2.0.144 在 ModDevArtifactsWorkflow.lambda$create$8 中
+// 直接对 createMinecraftArtifacts 的 toolsJavaExecutable 执行 .set(launcherFor{lv=21})，
+// 覆盖了我们的 convention。因此必须在插件配置完 task 之后再 .finalizeValue()
+// 前用 doFirst / afterEvaluate 重设。
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
+def jdk25 = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(25)
+}.map { it.executablePath.asFile.absolutePath }
+
+afterEvaluate {
+    tasks.configureEach { task ->
+        if (task.metaClass.respondsTo(task, 'setToolsJavaExecutable', Object) || task.hasProperty('toolsJavaExecutable')) {
+            try {
+                task.toolsJavaExecutable.set(jdk25)
+                task.toolsJavaExecutable.finalizeValue()
+            } catch (Exception ignored) {}
+        }
+        if (task.hasProperty('javaExecutable')) {
+            try {
+                task.javaExecutable.set(jdk25)
+                task.javaExecutable.finalizeValue()
+            } catch (Exception ignored) {}
+        }
+    }
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

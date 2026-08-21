@@ -8,6 +8,6 @@
     { "item": "minecraft:stone" }
   ],
   "results": [
-    { "id": "minecraft:iron_ore", "count": 1 }
+    { "item": "minecraft:iron_ore", "count": 1 }
   ]
 }

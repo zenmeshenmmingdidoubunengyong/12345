@@ -8,6 +8,6 @@
     { "item": "minecraft:stone" }
   ],
   "results": [
-    { "id": "create:zinc_ore", "count": 1 }
+    { "item": "create:zinc_ore", "count": 1 }
   ]
 }

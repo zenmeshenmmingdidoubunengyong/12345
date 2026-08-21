@@ -9,6 +9,6 @@
     { "item": "minecraft:stone" }
   ],
   "results": [
-    { "id": "createnuclear:lead_ore", "count": 1 }
+    { "item": "createnuclear:lead_ore", "count": 1 }
   ]
 }
